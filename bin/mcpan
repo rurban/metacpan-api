@@ -1,0 +1,476 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use MetaCPAN::API;
+
+use Getopt::Long;
+use List::Util qw(first);
+use List::MoreUtils qw(none);
+use Data::Dumper;
+
+my %args;
+my $result = GetOptions(
+  \%args,
+  'base_url|b=s',
+  'author|a',
+  'release|r',
+  'module|m',
+  'dist|d',
+  'verbose|v',
+);
+
+my ($what) = @ARGV;
+my $dispatch = {
+  author => sub { lookup_author($what) },
+  release => sub { lookup_release($what) },
+  module => sub { lookup_module($what) },
+  dist => sub { lookup_distribution($what) },
+};
+
+die "Need one of author|release|module|dist" 
+  if none { defined $args{$_} } qw(author release module dist);
+my $verb = first { defined $args{$_} } qw(author release module dist);
+my $mcpan = MetaCPAN::API->new(defined $args{base_url} ? (base_url => $args{base_url}) : ());
+$dispatch->{$verb}->();
+
+sub lookup_author {
+  my ($author) = @_;
+  my $author_obj = $mcpan->author($author);
+  if($args{verbose}) {
+    print Dumper $author_obj;
+    return;
+  }
+  print sprintf "Email: %s\nFull name: %s\n", @{$author_obj}{qw/email name/};
+}
+
+sub lookup_release {
+  my ($release) = @_;
+  my $release_obj = $mcpan->release(distribution => $release);
+  if($args{verbose}) {
+    print Dumper $release_obj;
+    return;
+  }
+  print sprintf "%-16s %s\n%-16s %s\n%-16s %s\n%-16s %s\n",
+    "PAUSE ID:", $release_obj->{author}, 
+    "Version on CPAN:", $release_obj->{version_numified},
+    "Path to dist:", $release_obj->{download_url}, 
+    "Abstract:", $release_obj->{abstract};
+}
+
+__END__
+{
+  asciiname => "Chris Nehren",
+  city => "Philadelphia",
+  country => "US",
+  dir => "id/A/AP/APEIRON",
+  email => [
+    "apeiron\@cpan.org"
+  ],
+  location => [
+    "39.9496069784",
+    "-75.1734728908"
+  ],
+  name => "Chris Nehren",
+  pauseid => "APEIRON",
+  updated => "2011-10-31T00:47:44",
+  user => "RKIRgZWgSAmn1QONFCupLg",
+  website => []
+}
+
+
+Module id = Moose
+    CPAN_USERID  FLORA (Florian Ragwitz <rafl@debian.org>)
+    CPAN_VERSION 2.0402
+    CPAN_FILE    D/DO/DOY/Moose-2.0402.tar.gz
+    MANPAGE      Moose - A postmodern object system for Perl 5
+    INST_FILE    /Users/apeiron/perl5/perlbrew/perls/perl-5.14.2/lib/site_perl/5.14.2/darwin-2level/Moose.pm
+    INST_VERSION 2.0402
+{
+  abstract => "A postmodern object system for Perl 5",
+  archive => "Moose-2.0402.tar.gz",
+  author => "DOY",
+  authorized => bless( do{\(my $o = 1)}, 'JSON::XS::Boolean' ),
+  date => "2012-02-04T07:12:09",
+  dependency => [
+    {
+      module => "DateTime",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "DateTime::Format::MySQL",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "PadWalker",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Test::LeakTrace",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "DBM::Deep",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Test::Spelling",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Data::Visitor",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "DateTime::Calendar::Mayan",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Regexp::Common",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "HTTP::Headers",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Test::DependentModules",
+      phase => "develop",
+      relationship => "requires",
+      version => "0.12",
+      version_numified => "0.12"
+    },
+    {
+      module => "Test::Output",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Test::Deep",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "File::Find::Rule",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "URI",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "IO::File",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Module::Refresh",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "IO::String",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Locale::US",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Module::Info",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Test::Inline",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Algorithm::C3",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Params::Coerce",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "SUPER",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Declare::Constraints::Simple",
+      phase => "develop",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Test::More",
+      phase => "test",
+      relationship => "requires",
+      version => "0.88",
+      version_numified => "0.88"
+    },
+    {
+      module => "Test::Requires",
+      phase => "test",
+      relationship => "requires",
+      version => "0.05",
+      version_numified => "0.05"
+    },
+    {
+      module => "Test::Fatal",
+      phase => "test",
+      relationship => "requires",
+      version => "0.001",
+      version_numified => "0.001"
+    },
+    {
+      module => "Package::DeprecationManager",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.11",
+      version_numified => "0.11"
+    },
+    {
+      module => "Scalar::Util",
+      phase => "runtime",
+      relationship => "requires",
+      version => "1.19",
+      version_numified => "1.19"
+    },
+    {
+      module => "Package::Stash::XS",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.24",
+      version_numified => "0.24"
+    },
+    {
+      module => "Sub::Exporter",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.980",
+      version_numified => "0.98"
+    },
+    {
+      module => "Params::Util",
+      phase => "runtime",
+      relationship => "requires",
+      version => "1.00",
+      version_numified => 1
+    },
+    {
+      module => "Task::Weaken",
+      phase => "runtime",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "List::MoreUtils",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.28",
+      version_numified => "0.28"
+    },
+    {
+      module => "MRO::Compat",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.05",
+      version_numified => "0.05"
+    },
+    {
+      module => "Class::Load::XS",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.01",
+      version_numified => "0.01"
+    },
+    {
+      module => "Try::Tiny",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.02",
+      version_numified => "0.02"
+    },
+    {
+      module => "Eval::Closure",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.04",
+      version_numified => "0.04"
+    },
+    {
+      module => "Class::Load",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.09",
+      version_numified => "0.09"
+    },
+    {
+      module => "Package::Stash",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.32",
+      version_numified => "0.32"
+    },
+    {
+      module => "Dist::CheckConflicts",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.02",
+      version_numified => "0.02"
+    },
+    {
+      module => "Sub::Name",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.05",
+      version_numified => "0.05"
+    },
+    {
+      module => "Data::OptList",
+      phase => "runtime",
+      relationship => "requires",
+      version => "0.107",
+      version_numified => "0.107"
+    },
+    {
+      module => "perl",
+      phase => "runtime",
+      relationship => "requires",
+      version => "v5.8.3",
+      version_numified => "5.008003"
+    },
+    {
+      module => "Devel::GlobalDestruction",
+      phase => "runtime",
+      relationship => "requires",
+      version => 0,
+      version_numified => 0
+    },
+    {
+      module => "Devel::PartialDump",
+      phase => "runtime",
+      relationship => "recommends",
+      version => "0.14",
+      version_numified => "0.14"
+    },
+    {
+      module => "ExtUtils::MakeMaker",
+      phase => "configure",
+      relationship => "requires",
+      version => "6.30",
+      version_numified => "6.3"
+    },
+    {
+      module => "Dist::CheckConflicts",
+      phase => "configure",
+      relationship => "requires",
+      version => "0.02",
+      version_numified => "0.02"
+    }
+  ],
+  distribution => "Moose",
+  download_url => "http://cpan.metacpan.org/authors/id/D/DO/DOY/Moose-2.0402.tar.gz",
+  first => bless( do{\(my $o = 0)}, 'JSON::XS::Boolean' ),
+  id => "2X3ZyD3jUQxWu4reJFAs2sa1xls",
+  license => [
+    "perl_5"
+  ],
+  maturity => "released",
+  name => "Moose-2.0402",
+  resources => {
+    bugtracker => {
+      mailto => "bug-moose\@rt.cpan.org",
+      web => "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Moose"
+    },
+    repository => {
+      type => "git",
+      url => "git://git.moose.perl.org/Moose.git",
+      web => "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=gitmo/Moose.git;a=summary"
+    }
+  },
+  stat => {
+    gid => 100,
+    mode => 33188,
+    mtime => "1328339529",
+    size => 677553,
+    uid => 1004
+  },
+  status => "latest",
+  tests => {
+    fail => 15,
+    na => 9,
+    pass => 674,
+    unknown => 1
+  },
+  version => "2.0402",
+  version_numified => "2.0402"
+}
