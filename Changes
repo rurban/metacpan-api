@@ -1,5 +1,9 @@
 Revision history for MetaCPAN-API
 
+0.43        2013-07-22 11:06:09 rurban
+            * added aperion's mcpan
+            * sort keys in _build_extra_params (rurban)
+
 0.42        08.01.12
             * Corrected documentation in MetaCPAN::API::Source.
             * Updated Dist::Zilla configuration, added more tests.
